@@ -33,18 +33,42 @@ final class MockConfigurator extends Configurator
 }
 
 test(function () {
-	$_SERVER['NETTE__FOOBAR'] = 'foobar1';
-	$_SERVER['NETTE__FOOBAR__FOOBAR'] = 'foobar2';
+	$_SERVER = [];
+	$_SERVER['NETTE__FOOBAR__BAR'] = 'foobar1';
+	$_SERVER['NETTE__FOOBAR__BAZ'] = 'foobar2';
+
 	$configurator = new MockConfigurator();
+
 	Assert::equal([
-		'foobar' => 'foobar1',
-		'foobar.foobar' => 'foobar2',
+		'foobar' => [
+			'bar' => 'foobar1',
+			'baz' => 'foobar2',
+		],
 	], $configurator->getEnvironmentParameters());
 });
 
 test(function () {
+	$_SERVER = [];
 	$_SERVER['NETTE_DEBUG'] = TRUE;
+
 	$configurator = new MockConfigurator();
 	$configurator->autoDebugMode();
+
 	Assert::true($configurator->isDebugMode());
+});
+
+test(function () {
+	$_SERVER = [];
+	$_SERVER['NETTE__DATABASE__HOST'] = 'localhost';
+
+	$configurator = new MockConfigurator();
+	$configurator->addParameters([
+		'foobar' => '%database.host%',
+	]);
+
+	$configurator->setTempDirectory(TEMP_DIR);
+	$container = $configurator->createContainer();
+
+	Assert::equal('localhost', $container->getParameters()['database']['host']);
+	Assert::equal('localhost', $container->getParameters()['foobar']);
 });
