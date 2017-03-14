@@ -62,7 +62,16 @@ class Configurator extends NConfigurator
 	public function autoDebugMode()
 	{
 		if (isset($_SERVER['NETTE_DEBUG'])) {
-			$this->setDebugMode($_SERVER['NETTE_DEBUG']);
+			$debug = $_SERVER['NETTE_DEBUG'];
+			$value = strtolower($debug);
+
+			if ($value === 'true' || $value === '1') {
+				$debug = TRUE;
+			} else if ($value === 'false' || $value === '0') {
+				$debug = FALSE;
+			}
+
+			$this->setDebugMode($debug);
 		}
 	}
 

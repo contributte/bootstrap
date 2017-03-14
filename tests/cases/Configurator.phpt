@@ -49,12 +49,27 @@ test(function () {
 
 test(function () {
 	$_SERVER = [];
-	$_SERVER['NETTE_DEBUG'] = TRUE;
-
 	$configurator = new MockConfigurator();
-	$configurator->autoDebugMode();
 
+	$_SERVER['NETTE_DEBUG'] = TRUE;
+	$configurator->autoDebugMode();
 	Assert::true($configurator->isDebugMode());
+
+	$_SERVER['NETTE_DEBUG'] = 'true';
+	$configurator->autoDebugMode();
+	Assert::true($configurator->isDebugMode());
+
+	$_SERVER['NETTE_DEBUG'] = '1';
+	$configurator->autoDebugMode();
+	Assert::true($configurator->isDebugMode());
+
+	$_SERVER['NETTE_DEBUG'] = 'false';
+	$configurator->autoDebugMode();
+	Assert::false($configurator->isDebugMode());
+
+	$_SERVER['NETTE_DEBUG'] = '0';
+	$configurator->autoDebugMode();
+	Assert::false($configurator->isDebugMode());
 });
 
 test(function () {
