@@ -9,17 +9,38 @@ class Configurator extends NConfigurator
 {
 
 	/**
+	 * Configurator
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->addParameters($this->getEnvironmentParameters());
+	}
+
+	/**
+	 * Collect default parameters
+	 *
 	 * @return array
 	 */
 	protected function getDefaultParameters()
 	{
-		$parameters = parent::getDefaultParameters();
-		$parameters = array_merge($parameters, $this->getEnvironmentParameters());
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		$last = end($trace);
+		$debugMode = static::detectDebugMode();
 
-		return $parameters;
+		return [
+			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : NULL,
+			'wwwDir' => isset($last['file']) ? dirname($last['file']) : NULL,
+			'debugMode' => $debugMode,
+			'productionMode' => !$debugMode,
+			'consoleMode' => PHP_SAPI === 'cli',
+		];
 	}
 
 	/**
+	 * Collect environment parameters
+	 *
 	 * @return array
 	 */
 	protected function getEnvironmentParameters()
