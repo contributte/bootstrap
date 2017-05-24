@@ -11,3 +11,14 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 Environment::setupTester();
 Environment::setupTimezone();
 Environment::setupVariables(__DIR__);
+
+/**
+ * @param string $key
+ * @param mixed $value
+ * @return void
+ */
+function env($key, $value)
+{
+	$_SERVER[$key] = $value;
+	putenv(sprintf('%s=%s', $key, $value));
+}
