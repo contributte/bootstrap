@@ -76,6 +76,9 @@
           "folders": ["src", "tests"]
         }
       }
+    },
+    "branch-alias": {
+      "dev-master": "0.3-dev"
     }
   }
 }
