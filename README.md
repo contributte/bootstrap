@@ -28,11 +28,11 @@ composer require contributte/bootstrap
 
 | State       | Version | Branch   | PHP      |
 |-------------|---------|----------|----------|
-| development | `^0.1`  | `master` | `>= 5.6` |
+| development | `^0.2`  | `master` | `>= 5.6` |
 
 ## Overview
 
-- [Configurator - bootstrap](https://github.com/contributte/bootstrap/blob/master/.docs/README.md#bootstrap)
+- [ExtraConfigurator - bootstrap](https://github.com/contributte/bootstrap/blob/master/.docs/README.md#bootstrap)
 
 ---
 
