@@ -2,11 +2,11 @@
 
 namespace Contributte\Bootstrap;
 
-use Nette\Configurator as NConfigurator;
+use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\InvalidStateException;
 
-class ExtraConfigurator extends NConfigurator
+class ExtraConfigurator extends Configurator
 {
 
 	/**
@@ -73,24 +73,24 @@ class ExtraConfigurator extends NConfigurator
 	 */
 
 	/**
-	 * @param NConfigurator $configurator
-	 * @return NConfigurator
+	 * @param Configurator $configurator
+	 * @return Configurator
 	 */
-	public static function setup(NConfigurator $configurator)
+	public static function setup(Configurator $configurator)
 	{
 		$configurator->setDebugMode(self::parseEnvDebugMode());
-		$configurator->addParameters(self::getEnvironmentParameters());
+		$configurator->addParameters(self::parseEnvironmentParameters());
 
 		return $configurator;
 	}
 
 	/**
-	 * @param NConfigurator $configurator
-	 * @return NConfigurator
+	 * @param Configurator $configurator
+	 * @return Configurator
 	 */
-	public static function wrap(NConfigurator $configurator)
+	public static function wrap(Configurator $configurator)
 	{
-		$configurator->onCompile[] = function (Compiler $compiler) {
+		$configurator->onCompile[] = function (Configurator $configurator, Compiler $compiler) {
 			$compiler->addConfig([
 				'parameters' => array_merge(
 					['debugMode' => self::parseEnvDebugMode()],
