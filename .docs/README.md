@@ -54,20 +54,23 @@ The main difference between `setup` and `wrap` is that `wrap` function is called
 because it overrides all parameters you passed via `addParameters` or `addConfig`. Be aware of that!
 
 ```php
+use Contributte\Bootstrap\ExtraConfigurator;
+use Nette\Configurator;
+
+$configurator = new Configurator();
+
+ExtraConfigurator::wrap($configurator); // onCompile
+// or
+ExtraConfigurator::setup($configurator); // directly
+
 $configurator->enableTracy(__DIR__ . '/../log');
 $configurator->setTimeZone('Europe/Prague');
 $configurator->setTempDirectory(__DIR__ . '/../temp');
-
-// ...
 
 $configurator->addConfig(__DIR__ . '/config/config.neon');
 $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 
 // ...
-
-ExtraConfigurator::setup($configurator); // directly
-// or
-ExtraConfigurator::wrap($configurator); // onCompile
 ```
 
 ### Helpers

@@ -73,6 +73,8 @@ class ExtraConfigurator extends Configurator
 	 */
 
 	/**
+	 * Setup debug mode and add parameters immediately
+	 *
 	 * @param Configurator $configurator
 	 * @return Configurator
 	 */
@@ -85,18 +87,16 @@ class ExtraConfigurator extends Configurator
 	}
 
 	/**
+	 * Setup debug mode and add parameters at compile time
+	 *
 	 * @param Configurator $configurator
 	 * @return Configurator
 	 */
 	public static function wrap(Configurator $configurator)
 	{
+		$configurator->setDebugMode(self::parseEnvDebugMode());
 		$configurator->onCompile[] = function (Configurator $configurator, Compiler $compiler) {
-			$compiler->addConfig([
-				'parameters' => array_merge(
-					['debugMode' => self::parseEnvDebugMode()],
-					self::parseEnvironmentParameters()
-				),
-			]);
+			$compiler->addConfig(['parameters' => self::parseEnvironmentParameters()]);
 		};
 
 		return $configurator;
