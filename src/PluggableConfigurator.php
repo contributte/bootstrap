@@ -3,6 +3,7 @@
 namespace Contributte\Bootstrap;
 
 use Contributte\Bootstrap\Plugin\ICompilerPlugin;
+use Contributte\Bootstrap\Plugin\IConfigurationPlugin;
 use Contributte\Bootstrap\Plugin\IContainerPlugin;
 use Contributte\Bootstrap\Plugin\IDebugCompilerPlugin;
 use Contributte\Bootstrap\Plugin\IDebugContainerPlugin;
@@ -72,6 +73,8 @@ class PluggableConfigurator extends Configurator
 	 */
 	public function createContainer()
 	{
+		$this->trigger(IConfigurationPlugin::class, $this);
+
 		$container = parent::createContainer();
 
 		$this->trigger(IContainerPlugin::class, $this, $container);
