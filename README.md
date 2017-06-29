@@ -32,7 +32,8 @@ composer require contributte/bootstrap
 
 ## Overview
 
-- [ExtraConfigurator - bootstrap](https://github.com/contributte/bootstrap/blob/master/.docs/README.md#bootstrap)
+- [ExtraConfigurator - bootstrap](https://github.com/contributte/bootstrap/blob/master/.docs/README.md#extraconfigurator)
+- [PluggableConfigurator - pluggable](https://github.com/contributte/bootstrap/blob/master/.docs/README.md#pluggableconfigurator)
 
 ---
 

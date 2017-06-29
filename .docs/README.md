@@ -3,6 +3,7 @@
 ## Content
 
 - [ExtraConfigurator - bootstraping](#extraconfigurator)
+- [PluggableConfigurator - plugin system](#pluggableconfigurator)
 
 ## ExtraConfigurator
 
@@ -93,3 +94,29 @@ You can manage debug modes over `NETTE_DEBUG` variable.
 - `NETTE_DEBUG`: 0
 - `NETTE_DEBUG`: 10.0.0.10
 - `NETTE_DEBUG`: cookie@10.0.0.10
+
+## PluggableConfigurator
+
+There's a need to organize bulk of codes together, we call them plugins. Official `Nette\Configurator` does not support
+any type of plugin, so `PluggableConfigurator` was created.
+
+```php
+use Contributte\Bootstrap\PluggableConfigurator;
+
+$pluggable = new PluggableConfigurator();
+
+$pluggable->addPlugin(new MyBeforeContainerIsLoadedPlugin());
+$pluggable->addPlugin(new SpecialOnlyInDebugModePlugin());
+```
+
+You can easilly add a new plugin via `addPlugin($plugin)` method.
+
+There are some types of plugin.
+
+| Plugin                  | Triggers                   | Arguments               | Mode  |
+|-------------------------|----------------------------|-------------------------|-------|
+| `IConfigurationPlugin`  | before `createContainer`   | Configurator            | ALL   |
+| `IContainerPlugin`      | after `createContainer`    | Configurator, Container | ALL   |
+| `IDebugContainerPlugin` | after `createContainer`    | Configurator, Container | DEBUG |
+| `ICompilerPlugin`       | during `generateContainer` | Configurator, Compiler  | ALL   |
+| `IDebugCompilerPlugin`  | during `generateContainer` | Configurator, Compiler  | DEBUG |
