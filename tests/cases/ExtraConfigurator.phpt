@@ -8,13 +8,8 @@ namespace Tests;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-use Contributte\Bootstrap\ExtraConfigurator;
 use Tester\Assert;
-
-final class MockExtraConfigurator extends ExtraConfigurator
-{
-
-}
+use Tests\Mocks\MockExtraConfigurator;
 
 // Parsing NETTE__ parameters
 test(function () {
