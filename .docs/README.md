@@ -7,7 +7,36 @@
 
 ## ExtraConfigurator
 
-The `ExtraConfigurator` extends `Configurator` and add a few extra methods for better usage in containers (Docker).
+The `ExtraConfigurator` extends `Configurator` and adds a few methods for better usage in containers (Docker).
+
+- `setFileDebugMode($fileName = NULL)`
+- `setEnvDebugMode()`
+- `addEnvParameters()`
+
+### Debug mode
+
+We added two methods to help you detect debug mode. You can either manage debug mode via `NETTE_DEBUG` environmental variable and detect it this way:
+
+```php
+$configurator = new ExtraConfigurator();
+$configurator->setEnvDebugMode();
+```
+
+or via file. If no file supplied as parameter it looks for `.debug` in root directory. The sole existence of the file with no content will set debug mode as TRUE.
+
+```php
+$configurator = new ExtraConfigurator();
+$configurator->setFileDebugMode(__DIR__ . '/../.debug');
+```
+
+Valid values for ENV variable `NETTE_DEBUG` and the file are:
+
+- true
+- 1
+- false
+- 0
+- 10.0.0.10
+- cookie@10.0.0.10
 
 ### Environment variables
 
@@ -26,74 +55,22 @@ Just create our configurator object.
 use Contributte\Bootstrap\ExtraConfigurator;
 
 $configurator = new ExtraConfigurator();
+$configurator->addEnvParameters();
 ```
 
 That's all.
 
 -----
 
-If you need to dig deeper, there are 2 main things for you:
-
-- parse `NETTE__<>` environment variables (safety)
-- detect debug mode from variable `NETTE_DEBUG`
-
-```php
-public function __construct()
-{
-    parent::__construct();
-
-    $this->addParameters(self::getEnvironmentParameters());
-    $this->setAutoDebugMode();
-}
-```
-
-### Factories
-
-If you don't want to create the `ExtraConfigurator` object that's fine. You can handle it via `setup` or `wrap` method.
-
-The main difference between `setup` and `wrap` is that `wrap` function is called during `onCompile` event. It's alpha & omega, 
-because it overrides all parameters you passed via `addParameters` or `addConfig`. Be aware of that!
-
-```php
-use Contributte\Bootstrap\ExtraConfigurator;
-use Nette\Configurator;
-
-$configurator = new Configurator();
-
-ExtraConfigurator::wrap($configurator); // onCompile
-// or
-ExtraConfigurator::setup($configurator); // directly
-
-$configurator->enableTracy(__DIR__ . '/../log');
-$configurator->setTimeZone('Europe/Prague');
-$configurator->setTempDirectory(__DIR__ . '/../temp');
-
-$configurator->addConfig(__DIR__ . '/config/config.neon');
-$configurator->addConfig(__DIR__ . '/config/config.local.neon');
-
-// ...
-```
-
 ### Helpers
 
-As you can see, there are a few static methods for you.
+You can also use these static methods for parsing ENV variables and setting debug mode from ENV variable.
 
 ```php
 $configurator->setDebugMode(ExtraConfigurator::parseEnvDebugMode());
 $configurator->addParameters(ExtraConfigurator::parseEnvironmentParameters());
 $configurator->addParameters(ExtraConfigurator::parseAllEnvironmentParameters());
 ```
-
-### Debug mode
-
-You can manage debug modes over `NETTE_DEBUG` variable.
-
-- `NETTE_DEBUG`: true
-- `NETTE_DEBUG`: 1
-- `NETTE_DEBUG`: false
-- `NETTE_DEBUG`: 0
-- `NETTE_DEBUG`: 10.0.0.10
-- `NETTE_DEBUG`: cookie@10.0.0.10
 
 ## PluggableConfigurator
 

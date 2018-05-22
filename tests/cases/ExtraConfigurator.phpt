@@ -44,7 +44,7 @@ test(function () {
 	], $configurator->getAllEnvironmentParameters());
 });
 
-// Debug mode
+// ENV Debug mode
 test(function () {
 	$_SERVER = [];
 	$configurator = new MockExtraConfigurator();
@@ -83,12 +83,53 @@ test(function () {
 	Assert::true($configurator->isDebugMode());
 });
 
+// FILE Debug mode
+test(function () {
+	$configurator = new MockExtraConfigurator();
+	$configurator->setDebugMode(FALSE);
+	$fileName = TEMP_DIR . '/.debug';
+
+	touch($fileName);
+	$configurator->setFileDebugMode($fileName);
+	Assert::true($configurator->isDebugMode());
+
+	file_put_contents($fileName, 'false');
+	$configurator->setFileDebugMode($fileName);
+	Assert::false($configurator->isDebugMode());
+
+	file_put_contents($fileName, 'true');
+	$configurator->setFileDebugMode($fileName);
+	Assert::true($configurator->isDebugMode());
+
+	file_put_contents($fileName, 'FALSE');
+	$configurator->setFileDebugMode($fileName);
+	Assert::false($configurator->isDebugMode());
+
+	file_put_contents($fileName, 'TRUE');
+	$configurator->setFileDebugMode($fileName);
+	Assert::true($configurator->isDebugMode());
+
+	file_put_contents($fileName, '0');
+	$configurator->setFileDebugMode($fileName);
+	Assert::false($configurator->isDebugMode());
+
+	file_put_contents($fileName, '1');
+	$configurator->setFileDebugMode($fileName);
+	Assert::true($configurator->isDebugMode());
+
+	$configurator->setDebugMode(FALSE);
+	file_put_contents($fileName, '10.0.0.1');
+	$configurator->setFileDebugMode($fileName);
+	Assert::true($configurator->isDebugMode());
+});
+
 // Passing parameters to configurator
 test(function () {
 	$_SERVER = [];
 	env('NETTE__DATABASE__HOST', 'localhost');
 
 	$configurator = new MockExtraConfigurator();
+	$configurator->addEnvParameters();
 	$configurator->addParameters([
 		'foobar' => '%database.host%',
 	]);

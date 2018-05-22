@@ -3,22 +3,10 @@
 namespace Contributte\Bootstrap;
 
 use Nette\Configurator;
-use Nette\DI\Compiler;
 use Nette\InvalidStateException;
 
 class ExtraConfigurator extends Configurator
 {
-
-	/**
-	 * Extra Configurator
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->addParameters(self::getEnvironmentParameters());
-		$this->setEnvDebugMode();
-	}
 
 	/**
 	 * Collect default parameters
@@ -69,37 +57,35 @@ class ExtraConfigurator extends Configurator
 	}
 
 	/**
-	 * FACTORIES ***************************************************************
+	 * @param string $fileName
+	 * @return void
 	 */
-
-	/**
-	 * Setup debug mode and add parameters immediately
-	 *
-	 * @param Configurator $configurator
-	 * @return Configurator
-	 */
-	public static function setup(Configurator $configurator)
+	public function setFileDebugMode($fileName = NULL)
 	{
-		$configurator->setDebugMode(self::parseEnvDebugMode());
-		$configurator->addParameters(self::parseEnvironmentParameters());
+		// Given file name or default file path
+		$appDir = $this->parameters['appDir'] ? $this->parameters['appDir'] : NULL;
+		if (!$fileName && !$appDir) return;
 
-		return $configurator;
+		// Try to load file
+		$content = @file_get_contents($fileName ?: $appDir . '/../.debug');
+		if ($content === FALSE) return;
+
+		// File exists with no content
+		if ($content === '') {
+			$this->setDebugMode(TRUE);
+			return;
+		}
+
+		$debug = self::parseDebugValue(trim($content));
+		$this->setDebugMode($debug);
 	}
 
 	/**
-	 * Setup debug mode and add parameters at compile time
-	 *
-	 * @param Configurator $configurator
-	 * @return Configurator
+	 * @return void
 	 */
-	public static function wrap(Configurator $configurator)
+	public function addEnvParameters()
 	{
-		$configurator->setDebugMode(self::parseEnvDebugMode());
-		$configurator->onCompile[] = function (Configurator $configurator, Compiler $compiler) {
-			$compiler->addConfig(['parameters' => self::parseEnvironmentParameters()]);
-		};
-
-		return $configurator;
+		$this->addParameters(self::getEnvironmentParameters());
 	}
 
 	/**
@@ -173,18 +159,31 @@ class ExtraConfigurator extends Configurator
 	{
 		$debug = getenv('NETTE_DEBUG');
 		if ($debug !== FALSE) {
-			$value = $debug;
-
-			if ($value === 'true' || $value === '1') {
-				$debug = TRUE;
-			} else if ($value === 'false' || $value === '0') {
-				$debug = FALSE;
-			}
-
-			return $debug;
+			return self::parseDebugValue($debug);
 		}
 
 		return FALSE;
+	}
+
+	/**
+	 * HELPERS ******************************************************************
+	 */
+
+	/**
+	 * @param mixed $debug
+	 * @return mixed
+	 */
+	public static function parseDebugValue($debug)
+	{
+		$value = $debug;
+
+		if (strtolower($value) === 'true' || $value === '1') {
+			$debug = TRUE;
+		} else if (strtolower($value) === 'false' || $value === '0') {
+			$debug = FALSE;
+		}
+
+		return $debug;
 	}
 
 }
