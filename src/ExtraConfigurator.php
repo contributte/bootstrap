@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Contributte\Bootstrap;
 
@@ -11,17 +11,17 @@ class ExtraConfigurator extends Configurator
 	/**
 	 * Collect default parameters
 	 *
-	 * @return array
+	 * @return mixed[]
 	 */
-	protected function getDefaultParameters()
+	protected function getDefaultParameters(): array
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 		$last = end($trace);
 		$debugMode = static::detectDebugMode();
 
 		return [
-			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : NULL,
-			'wwwDir' => isset($last['file']) ? dirname($last['file']) : NULL,
+			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : null,
+			'wwwDir' => isset($last['file']) ? dirname($last['file']) : null,
 			'debugMode' => $debugMode,
 			'productionMode' => !$debugMode,
 			'consoleMode' => PHP_SAPI === 'cli',
@@ -31,9 +31,9 @@ class ExtraConfigurator extends Configurator
 	/**
 	 * Collect environment parameters with NETTE__ prefix
 	 *
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getEnvironmentParameters()
+	public function getEnvironmentParameters(): array
 	{
 		return self::parseEnvironmentParameters();
 	}
@@ -41,38 +41,31 @@ class ExtraConfigurator extends Configurator
 	/**
 	 * Collect all environment variables
 	 *
-	 * @return array
+	 * @return mixed[]
 	 */
-	public function getAllEnvironmentParameters()
+	public function getAllEnvironmentParameters(): array
 	{
 		return self::parseAllEnvironmentParameters();
 	}
 
-	/**
-	 * @return void
-	 */
-	public function setEnvDebugMode()
+	public function setEnvDebugMode(): void
 	{
 		$this->setDebugMode(self::parseEnvDebugMode());
 	}
 
-	/**
-	 * @param string $fileName
-	 * @return void
-	 */
-	public function setFileDebugMode($fileName = NULL)
+	public function setFileDebugMode(?string $fileName = null): void
 	{
 		// Given file name or default file path
-		$appDir = $this->parameters['appDir'] ? $this->parameters['appDir'] : NULL;
-		if (!$fileName && !$appDir) return;
+		$appDir = $this->parameters['appDir'] ?? null;
+		if ($fileName === null && $appDir === null) return;
 
 		// Try to load file
 		$content = @file_get_contents($fileName ?: $appDir . '/../.debug');
-		if ($content === FALSE) return;
+		if ($content === false) return;
 
 		// File exists with no content
 		if ($content === '') {
-			$this->setDebugMode(TRUE);
+			$this->setDebugMode(true);
 			return;
 		}
 
@@ -80,24 +73,17 @@ class ExtraConfigurator extends Configurator
 		$this->setDebugMode($debug);
 	}
 
-	/**
-	 * @return void
-	 */
-	public function addEnvParameters()
+	public function addEnvParameters(): void
 	{
-		$this->addParameters(self::getEnvironmentParameters());
+		$this->addParameters($this->getEnvironmentParameters());
 	}
-
-	/**
-	 * STATIC ******************************************************************
-	 */
 
 	/**
 	 * Parse environment parameters with NETTE__ prefix
 	 *
-	 * @return array
+	 * @return mixed[]
 	 */
-	public static function parseEnvironmentParameters()
+	public static function parseEnvironmentParameters(): array
 	{
 		$map = function (&$array, array $keys, $value) use (&$map) {
 			if (count($keys) <= 0) return $value;
@@ -122,7 +108,7 @@ class ExtraConfigurator extends Configurator
 		foreach ($_SERVER as $key => $value) {
 			// Ensure value
 			$value = getenv($key);
-			if (strpos($key, 'NETTE__') === 0 && $value !== FALSE) {
+			if (strpos($key, 'NETTE__') === 0 && $value !== false) {
 				// Parse NETTE__{NAME-1}__{NAME-N}
 				$keys = explode('__', strtolower(substr($key, 7)));
 				// Make array structure
@@ -136,15 +122,15 @@ class ExtraConfigurator extends Configurator
 	/**
 	 * Parse all environment variables
 	 *
-	 * @return array
+	 * @return mixed[]
 	 */
-	public static function parseAllEnvironmentParameters()
+	public static function parseAllEnvironmentParameters(): array
 	{
 		$parameters = [];
 		foreach ($_SERVER as $key => $value) {
 			// Ensure value
 			$value = getenv($key);
-			if ($value !== FALSE) {
+			if ($value !== false) {
 				$parameters[$key] = $value;
 			}
 		}
@@ -153,34 +139,29 @@ class ExtraConfigurator extends Configurator
 	}
 
 	/**
-	 * @return bool
+	 * @return bool|string
 	 */
 	public static function parseEnvDebugMode()
 	{
 		$debug = getenv('NETTE_DEBUG');
-		if ($debug !== FALSE) {
+		if ($debug !== false) {
 			return self::parseDebugValue($debug);
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**
-	 * HELPERS ******************************************************************
+	 * @return bool|string
 	 */
-
-	/**
-	 * @param mixed $debug
-	 * @return mixed
-	 */
-	public static function parseDebugValue($debug)
+	public static function parseDebugValue(string $debug)
 	{
 		$value = $debug;
 
 		if (strtolower($value) === 'true' || $value === '1') {
-			$debug = TRUE;
-		} else if (strtolower($value) === 'false' || $value === '0') {
-			$debug = FALSE;
+			$debug = true;
+		} elseif (strtolower($value) === 'false' || $value === '0') {
+			$debug = false;
 		}
 
 		return $debug;

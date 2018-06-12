@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 use Ninjify\Nunjuck\Environment;
 
@@ -13,11 +13,9 @@ Environment::setupTimezone();
 Environment::setupVariables(__DIR__);
 
 /**
- * @param string $key
- * @param mixed $value
- * @return void
+ * @param string|float|bool $value
  */
-function env($key, $value)
+function env(string $key, $value): void
 {
 	$_SERVER[$key] = $value;
 	putenv(sprintf('%s=%s', $key, $value));

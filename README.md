@@ -26,6 +26,8 @@ composer require contributte/bootstrap
 
 | State       | Version | Branch   | PHP      |
 |-------------|---------|----------|----------|
+| dev         | `^0.4`  | `master` | `>= 7.1` |
+| stable      | `^0.3`  | `master` | `>= 7.1` |
 | stable      | `^0.2`  | `master` | `>= 5.6` |
 
 ## Overview
@@ -44,6 +46,13 @@ composer require contributte/bootstrap
         </a>
         </br>
         <a href="https://github.com/f3l1x">Milan Felix Šulc</a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/mabar">
+            <img width="150" height="150" src="https://avatars0.githubusercontent.com/u/20974277?s=400&v=4">
+        </a>
+        </br>
+        <a href="https://github.com/mabar">Marek Bartoš</a>
       </td>
     </tr>
   <tbody>

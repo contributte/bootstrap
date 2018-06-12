@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Tests;
 
@@ -14,20 +14,20 @@ use Tester\Assert;
 use Tests\Mocks\MockContainerPlugin;
 use Tests\Mocks\MockDebugContainerPlugin;
 
-test(function () {
+test(function (): void {
 	$pluggable = new PluggableConfigurator();
 	$pluggable->setTempDirectory(TEMP_DIR);
 
 	$pluggable->addPlugin(new MockContainerPlugin());
 	$pluggable->addPlugin(new MockDebugContainerPlugin());
 
-	$pluggable->setDebugMode(FALSE);
+	$pluggable->setDebugMode(false);
 	$pluggable->createContainer();
 
 	Assert::equal([MockContainerPlugin::class], Notes::fetch());
 });
 
-test(function () {
+test(function (): void {
 	$pluggable = new PluggableConfigurator();
 	$pluggable->setTempDirectory(TEMP_DIR);
 	unset($pluggable->defaultExtensions['di']);
@@ -35,7 +35,7 @@ test(function () {
 	$pluggable->addPlugin(new MockContainerPlugin());
 	$pluggable->addPlugin(new MockDebugContainerPlugin());
 
-	$pluggable->setDebugMode(TRUE);
+	$pluggable->setDebugMode(true);
 	$pluggable->createContainer();
 
 	Assert::equal([

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Contributte\Bootstrap\Plugin;
 
@@ -8,11 +8,6 @@ use Nette\DI\Compiler;
 interface ICompilerPlugin extends IPlugin
 {
 
-	/**
-	 * @param Configurator $configurator
-	 * @param Compiler $compiler
-	 * @return void
-	 */
-	public function plugin(Configurator $configurator, Compiler $compiler);
+	public function plugin(Configurator $configurator, Compiler $compiler): void;
 
 }
