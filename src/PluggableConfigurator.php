@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Contributte\Bootstrap;
 
@@ -26,52 +26,37 @@ class PluggableConfigurator extends Configurator
 		parent::__construct();
 
 		// Attach compiler plugin
-		$this->onCompile[] = function (Configurator $configurator, Compiler $compiler) {
+		$this->onCompile[] = function (Configurator $configurator, Compiler $compiler): void {
 			$this->compile($configurator, $compiler);
 		};
 	}
 
 	/**
-	 * GETTERS/SETTERS *********************************************************
-	 */
-
-	/**
 	 * Collect default parameters
 	 *
-	 * @return array
+	 * @return mixed[]
 	 */
-	protected function getDefaultParameters()
+	protected function getDefaultParameters(): array
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 		$last = end($trace);
 		$debugMode = static::detectDebugMode();
 
 		return [
-			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : NULL,
-			'wwwDir' => isset($last['file']) ? dirname($last['file']) : NULL,
+			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : null,
+			'wwwDir' => isset($last['file']) ? dirname($last['file']) : null,
 			'debugMode' => $debugMode,
 			'productionMode' => !$debugMode,
 			'consoleMode' => PHP_SAPI === 'cli',
 		];
 	}
 
-	/**
-	 * @param IPlugin $plugin
-	 * @return void
-	 */
-	public function addPlugin(IPlugin $plugin)
+	public function addPlugin(IPlugin $plugin): void
 	{
 		$this->plugins[] = $plugin;
 	}
 
-	/**
-	 * NETTE CONFIGURATOR ******************************************************
-	 */
-
-	/**
-	 * @return Container
-	 */
-	public function createContainer()
+	public function createContainer(): Container
 	{
 		$this->trigger(IConfigurationPlugin::class, $this);
 
@@ -86,16 +71,7 @@ class PluggableConfigurator extends Configurator
 		return $container;
 	}
 
-	/**
-	 * HELPERS *****************************************************************
-	 */
-
-	/**
-	 * @param Configurator $configurator
-	 * @param Compiler $compiler
-	 * @return void
-	 */
-	protected function compile(Configurator $configurator, Compiler $compiler)
+	protected function compile(Configurator $configurator, Compiler $compiler): void
 	{
 		$this->trigger(ICompilerPlugin::class, $configurator, $compiler);
 
@@ -105,16 +81,14 @@ class PluggableConfigurator extends Configurator
 	}
 
 	/**
-	 * @param string $class
-	 * @param array ...$params
-	 * @return void
+	 * @param mixed[] $params
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
-	protected function trigger($class, ...$params)
+	protected function trigger(string $class, ...$params): void
 	{
 		foreach ($this->plugins as $plugin) {
 			// Skip different plugin
 			if (!($plugin instanceof $class)) continue;
-
 			call_user_func_array([$plugin, 'plugin'], $params);
 		}
 	}

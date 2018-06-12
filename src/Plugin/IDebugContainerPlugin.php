@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Contributte\Bootstrap\Plugin;
 
@@ -8,11 +8,6 @@ use Nette\DI\Container;
 interface IDebugContainerPlugin extends IPlugin
 {
 
-	/**
-	 * @param Configurator $configurator
-	 * @param Container $container
-	 * @return void
-	 */
-	public function plugin(Configurator $configurator, Container $container);
+	public function plugin(Configurator $configurator, Container $container): void;
 
 }

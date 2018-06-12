@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Tests;
 
@@ -12,7 +12,7 @@ use Tester\Assert;
 use Tests\Mocks\MockExtraConfigurator;
 
 // Parsing NETTE__ parameters
-test(function () {
+test(function (): void {
 	$_SERVER = [];
 	env('NETTE__FOOBAR__BAR', 'foobar1');
 	env('NETTE__FOOBAR__BAZ', 'foobar2');
@@ -29,7 +29,7 @@ test(function () {
 });
 
 // Parsing all ENV parameters
-test(function () {
+test(function (): void {
 	$_SERVER = [];
 	env('NETTE__FOOBAR__BAR', 'foobar1');
 	env('NETTE_INVALID', 'foobar3');
@@ -45,11 +45,11 @@ test(function () {
 });
 
 // ENV Debug mode
-test(function () {
+test(function (): void {
 	$_SERVER = [];
 	$configurator = new MockExtraConfigurator();
 
-	env('NETTE_DEBUG', TRUE);
+	env('NETTE_DEBUG', true);
 	$configurator->setEnvDebugMode();
 	Assert::true($configurator->isDebugMode());
 
@@ -61,7 +61,7 @@ test(function () {
 	$configurator->setEnvDebugMode();
 	Assert::true($configurator->isDebugMode());
 
-	env('NETTE_DEBUG', FALSE);
+	env('NETTE_DEBUG', false);
 	$configurator->setEnvDebugMode();
 	Assert::false($configurator->isDebugMode());
 
@@ -84,9 +84,9 @@ test(function () {
 });
 
 // FILE Debug mode
-test(function () {
+test(function (): void {
 	$configurator = new MockExtraConfigurator();
-	$configurator->setDebugMode(FALSE);
+	$configurator->setDebugMode(false);
 	$fileName = TEMP_DIR . '/.debug';
 
 	touch($fileName);
@@ -117,14 +117,14 @@ test(function () {
 	$configurator->setFileDebugMode($fileName);
 	Assert::true($configurator->isDebugMode());
 
-	$configurator->setDebugMode(FALSE);
+	$configurator->setDebugMode(false);
 	file_put_contents($fileName, '10.0.0.1');
 	$configurator->setFileDebugMode($fileName);
 	Assert::true($configurator->isDebugMode());
 });
 
 // Passing parameters to configurator
-test(function () {
+test(function (): void {
 	$_SERVER = [];
 	env('NETTE__DATABASE__HOST', 'localhost');
 

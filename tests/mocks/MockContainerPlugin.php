@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Tests\Mocks;
 
@@ -10,12 +10,7 @@ use Ninjify\Nunjuck\Notes;
 final class MockContainerPlugin implements IContainerPlugin
 {
 
-	/**
-	 * @param Configurator $configurator
-	 * @param Container $container
-	 * @return void
-	 */
-	public function plugin(Configurator $configurator, Container $container)
+	public function plugin(Configurator $configurator, Container $container): void
 	{
 		Notes::add(__CLASS__);
 	}
