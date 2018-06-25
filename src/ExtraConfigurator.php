@@ -20,7 +20,7 @@ class ExtraConfigurator extends Configurator
 		$debugMode = static::detectDebugMode();
 
 		return [
-			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : null,
+			'appDir' => isset($trace[1]['file']) ? dirname($trace[1]['file']) : null,
 			'wwwDir' => isset($last['file']) ? dirname($last['file']) : null,
 			'debugMode' => $debugMode,
 			'productionMode' => !$debugMode,
