@@ -15,21 +15,21 @@ The `ExtraConfigurator` extends `Configurator` and adds a few methods for better
 
 ### Debug mode
 
-We added two methods to help you detect debug mode. You can either manage debug mode via `NETTE_DEBUG` environmental variable and detect it this way:
+We added two methods to help you detect the debug mode. You can either manage the debug mode via `NETTE_DEBUG` environmental variable and detect it this way:
 
 ```php
 $configurator = new ExtraConfigurator();
 $configurator->setEnvDebugMode();
 ```
 
-or via file. If no file supplied as parameter it looks for `.debug` in root directory. The sole existence of the file with no content will set debug mode as TRUE.
+or via a file. If no file is supplied as a parameter, it looks for `.debug` file in the root directory. The sole existence of the file with no content will set the debug mode to `TRUE`.
 
 ```php
 $configurator = new ExtraConfigurator();
 $configurator->setFileDebugMode(__DIR__ . '/../.debug');
 ```
 
-Valid values for ENV variable `NETTE_DEBUG` and the file are:
+Valid values for the ENV variable `NETTE_DEBUG` and the file are:
 
 - true
 - 1
@@ -49,7 +49,7 @@ export NETTE__DATABASE__USER=test
 export NETTE__DATABASE__HOST=localhost
 ```
 
-Just create our configurator object.
+Just create your configurator object.
 
 ```php
 use Contributte\Bootstrap\ExtraConfigurator;
@@ -64,7 +64,7 @@ That's all.
 
 ### Helpers
 
-You can also use these static methods for parsing ENV variables and setting debug mode from ENV variable.
+You can also use these static methods for parsing ENV variables and setting the debug mode from the ENV variable.
 
 ```php
 $configurator->setDebugMode(ExtraConfigurator::parseEnvDebugMode());
