@@ -85,6 +85,17 @@ class ExtraConfigurator extends Configurator
 	 */
 	public static function parseEnvironmentParameters(): array
 	{
+		return self::parseParameters($_SERVER, 'NETTE__');
+	}
+
+	/**
+	 * Parse given parameters with custom prefix
+	 *
+	 * @param mixed[] $variables
+	 * @return mixed[]
+	 */
+	public static function parseParameters(array $variables, string $prefix): array
+	{
 		$map = function (&$array, array $keys, $value) use (&$map) {
 			if (count($keys) <= 0) return $value;
 
@@ -105,12 +116,12 @@ class ExtraConfigurator extends Configurator
 		};
 
 		$parameters = [];
-		foreach ($_SERVER as $key => $value) {
+		foreach ($variables as $key => $value) {
 			// Ensure value
 			$value = getenv($key);
-			if (strpos($key, 'NETTE__') === 0 && $value !== false) {
-				// Parse NETTE__{NAME-1}__{NAME-N}
-				$keys = explode('__', strtolower(substr($key, 7)));
+			if (strpos($key, $prefix) === 0 && $value !== false) {
+				// Parse PREFIX__{NAME-1}__{NAME-N}
+				$keys = explode('__', strtolower(substr($key, strlen($prefix))));
 				// Make array structure
 				$map($parameters, $keys, $value);
 			}
