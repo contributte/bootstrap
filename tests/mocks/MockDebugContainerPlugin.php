@@ -12,7 +12,7 @@ final class MockDebugContainerPlugin implements IDebugContainerPlugin
 
 	public function plugin(Configurator $configurator, Container $container): void
 	{
-		Notes::add(__CLASS__);
+		Notes::add(self::class);
 	}
 
 }
