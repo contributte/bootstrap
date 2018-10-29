@@ -20,7 +20,7 @@ script:
   fi
 
 # Tests
-- composer run-script tests
+- composer run-script tester
 
 after_failure:
 # Print *.actual content
@@ -33,7 +33,7 @@ jobs:
     install:
     - travis_retry composer update --no-progress --prefer-dist --prefer-lowest
     script:
-    - composer run-script tests
+    - composer run-script tester
 
   - stage: Quality Assurance
     php: 7.1
