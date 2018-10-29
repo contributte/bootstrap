@@ -2,6 +2,7 @@
 
 namespace Contributte\Bootstrap;
 
+use Closure;
 use Contributte\Bootstrap\Plugin\ICompilerPlugin;
 use Contributte\Bootstrap\Plugin\IConfigurationPlugin;
 use Contributte\Bootstrap\Plugin\IContainerPlugin;
@@ -89,7 +90,8 @@ class PluggableConfigurator extends Configurator
 		foreach ($this->plugins as $plugin) {
 			// Skip different plugin
 			if (!($plugin instanceof $class)) continue;
-			call_user_func_array([$plugin, 'plugin'], $params);
+			// Trigger plugin->plugin(...$params)
+			call_user_func_array(Closure::fromCallable([$plugin, 'plugin']), $params);
 		}
 	}
 

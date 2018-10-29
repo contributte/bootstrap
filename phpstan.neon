@@ -5,4 +5,5 @@ includes:
 
 parameters:
 	ignoreErrors:
-		-  '#PHPDoc tag @param for parameter \$params with type array is not subtype of native type array\<int, mixed\>#'
+		- "#PHPDoc tag @param for parameter \\$params with type array is not subtype of native type array\\<int, mixed\\>#"
+		- "#Parameter \\#1 \\$callable of static method Closure::fromCallable\\(\\) expects callable, array<int, Contributte\\\\Bootstrap\\\\Plugin\\\\IPlugin\\|string> given.#"
