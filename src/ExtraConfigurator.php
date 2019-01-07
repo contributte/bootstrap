@@ -142,19 +142,19 @@ class ExtraConfigurator extends Configurator
 	}
 
 	/**
-	 * @return string[]
+	 * @return mixed[]
 	 */
 	public static function parseParameter(string $key): array
 	{
 		if (self::$parseCase === self::PARSE_LOWERCASE) {
-			return explode(self::$parseDelimiter, strtolower($key));
+			return (array) explode(self::$parseDelimiter, strtolower($key));
 		}
 
 		if (self::$parseCase === self::PARSE_UPPERCASE) {
-			return explode(self::$parseDelimiter, strtoupper($key));
+			return (array) explode(self::$parseDelimiter, strtoupper($key));
 		}
 
-		return explode(self::$parseDelimiter, $key);
+		return (array) explode(self::$parseDelimiter, $key);
 	}
 
 	public function setParseCase(int $mode): void
