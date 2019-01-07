@@ -60,6 +60,28 @@ $configurator->addEnvParameters();
 
 That's all.
 
+### Parse case
+
+By default `NETTE__FOO` is `NETTE__` stripped and `FOO` is converted to lowercase. You can change it to
+natural parse case.
+
+For example `NETTE_USer=felix` will produce:
+
+```php
+$configurator->setParseCase($configurator::PARSE_NATURAL); // USer
+$configurator->setParseCase($configurator::PARSE_LOWERCASE); // user
+$configurator->setParseCase($configurator::PARSE_UPPERCASE); // USER
+```
+
+## Parse delimiter
+
+By default we have `__` delimiter. It can be changed to suppor `NETTE_FOO` or `NETTE.FOO`.
+
+```php
+$configurator->setParseDelimiter('_');
+$configurator->setParseDelimiter('.');
+```
+
 -----
 
 ### Helpers

@@ -8,6 +8,16 @@ use Nette\InvalidStateException;
 class ExtraConfigurator extends Configurator
 {
 
+	public const PARSE_NATURAL = 1;
+	public const PARSE_LOWERCASE = 2;
+	public const PARSE_UPPERCASE = 3;
+
+	/** @var int How to parse the parameters */
+	protected static $parseCase = self::PARSE_LOWERCASE;
+
+	/** @var string Sections separator */
+	protected static $parseDelimiter = '__';
+
 	/**
 	 * Collect default parameters
 	 *
@@ -29,13 +39,13 @@ class ExtraConfigurator extends Configurator
 	}
 
 	/**
-	 * Collect environment parameters with NETTE__ prefix
+	 * Collect environment parameters with NETTE{delimiter=__} prefix
 	 *
 	 * @return mixed[]
 	 */
 	public function getEnvironmentParameters(): array
 	{
-		return self::parseEnvironmentParameters();
+		return static::parseEnvironmentParameters();
 	}
 
 	/**
@@ -45,12 +55,12 @@ class ExtraConfigurator extends Configurator
 	 */
 	public function getAllEnvironmentParameters(): array
 	{
-		return self::parseAllEnvironmentParameters();
+		return static::parseAllEnvironmentParameters();
 	}
 
 	public function setEnvDebugMode(): void
 	{
-		$this->setDebugMode(self::parseEnvDebugMode());
+		$this->setDebugMode(static::parseEnvDebugMode());
 	}
 
 	public function setFileDebugMode(?string $fileName = null): void
@@ -66,10 +76,11 @@ class ExtraConfigurator extends Configurator
 		// File exists with no content
 		if ($content === '') {
 			$this->setDebugMode(true);
+
 			return;
 		}
 
-		$debug = self::parseDebugValue(trim($content));
+		$debug = static::parseDebugValue(trim($content));
 		$this->setDebugMode($debug);
 	}
 
@@ -79,13 +90,13 @@ class ExtraConfigurator extends Configurator
 	}
 
 	/**
-	 * Parse environment parameters with NETTE__ prefix
+	 * Parse environment parameters with NETTE{delimiter=__} prefix
 	 *
 	 * @return mixed[]
 	 */
 	public static function parseEnvironmentParameters(): array
 	{
-		return self::parseParameters($_SERVER, 'NETTE__');
+		return static::parseParameters($_SERVER, 'NETTE' . self::$parseDelimiter);
 	}
 
 	/**
@@ -120,14 +131,40 @@ class ExtraConfigurator extends Configurator
 			// Ensure value
 			$value = getenv($key);
 			if (strpos($key, $prefix) === 0 && $value !== false) {
-				// Parse PREFIX__{NAME-1}__{NAME-N}
-				$keys = explode('__', strtolower(substr($key, strlen($prefix))));
+				// Parse PREFIX{delimiter=__}{NAME-1}{delimiter=__}{NAME-N}
+				$keys = static::parseParameter(substr($key, strlen($prefix)));
 				// Make array structure
 				$map($parameters, $keys, $value);
 			}
 		}
 
 		return $parameters;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function parseParameter(string $key): array
+	{
+		if (self::$parseCase === self::PARSE_LOWERCASE) {
+			return explode(self::$parseDelimiter, strtolower($key));
+		}
+
+		if (self::$parseCase === self::PARSE_UPPERCASE) {
+			return explode(self::$parseDelimiter, strtoupper($key));
+		}
+
+		return explode(self::$parseDelimiter, $key);
+	}
+
+	public function setParseCase(int $mode): void
+	{
+		self::$parseCase = $mode;
+	}
+
+	public function setParseDelimiter(string $delimiter): void
+	{
+		self::$parseDelimiter = $delimiter;
 	}
 
 	/**
@@ -156,7 +193,7 @@ class ExtraConfigurator extends Configurator
 	{
 		$debug = getenv('NETTE_DEBUG');
 		if ($debug !== false) {
-			return self::parseDebugValue($debug);
+			return static::parseDebugValue($debug);
 		}
 
 		return false;
