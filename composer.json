@@ -18,8 +18,8 @@
   ],
   "require": {
     "php": "^7.2",
-    "nette/bootstrap": "~2.4.6",
-    "nette/utils": "~2.5.3"
+    "nette/bootstrap": "~3.0.0",
+    "nette/utils": "~3.0.1"
   },
   "require-dev": {
     "ninjify/qa": "^0.8.0",
@@ -47,7 +47,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.4-dev"
+      "dev-master": "0.5-dev"
     }
   }
 }
