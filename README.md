@@ -1,8 +1,6 @@
-# Contributte > Bootstrap
+# Contributte Bootstrap
 
-:sparkles: Extra contribution to [`nette/bootstrap`](https://github.com/nette/bootstrap).
-
------
+Extra contribution to [`nette/bootstrap`](https://github.com/nette/bootstrap).
 
 [![Build Status](https://img.shields.io/travis/contributte/bootstrap.svg?style=flat-square)](https://travis-ci.org/contributte/bootstrap)
 [![Code coverage](https://img.shields.io/coveralls/contributte/bootstrap.svg?style=flat-square)](https://coveralls.io/r/contributte/bootstrap)
@@ -10,17 +8,17 @@
 [![Downloads this Month](https://img.shields.io/packagist/dm/contributte/bootstrap.svg?style=flat-square)](https://packagist.org/packages/contributte/bootstrap)
 [![Downloads total](https://img.shields.io/packagist/dt/contributte/bootstrap.svg?style=flat-square)](https://packagist.org/packages/contributte/bootstrap)
 [![Latest stable](https://img.shields.io/packagist/v/contributte/bootstrap.svg?style=flat-square)](https://packagist.org/packages/contributte/bootstrap)
-[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
+[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
 
 ## Discussion / Help
 
 [![Join the chat](https://img.shields.io/gitter/room/contributte/contributte.svg?style=flat-square)](http://bit.ly/ctteg)
 
-## Install
+## Documentation
 
-```
-composer require contributte/bootstrap
-```
+- [Setup](.docs/README.md#setup)
+- [ExtraConfigurator](.docs/README.md#extraconfigurator)
+- [PluggableConfigurator](.docs/README.md#pluggableconfigurator)
 
 ## Versions
 
@@ -29,11 +27,6 @@ composer require contributte/bootstrap
 | dev         | `^0.4`  | `master` | `>= 7.1` |
 | stable      | `^0.3`  | `master` | `>= 7.1` |
 | stable      | `^0.2`  | `master` | `>= 5.6` |
-
-## Overview
-
-- [ExtraConfigurator - bootstrap](https://github.com/contributte/bootstrap/blob/master/.docs/README.md#extraconfigurator)
-- [PluggableConfigurator - pluggable](https://github.com/contributte/bootstrap/blob/master/.docs/README.md#pluggableconfigurator)
 
 ## Maintainers
 
