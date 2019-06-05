@@ -1,9 +1,16 @@
-# Bootstrap
+# Contributte Bootstrap
 
 ## Content
 
-- [ExtraConfigurator - bootstraping](#extraconfigurator)
-- [PluggableConfigurator - plugin system](#pluggableconfigurator)
+- [Setup](#setup)
+- [ExtraConfigurator](#extraconfigurator)
+- [PluggableConfigurator](#pluggableconfigurator)
+
+## Setup
+
+```bash
+composer require contributte/bootstrap
+```
 
 ## ExtraConfigurator
 
@@ -18,6 +25,8 @@ The `ExtraConfigurator` extends `Configurator` and adds a few methods for better
 We added two methods to help you detect the debug mode. You can either manage the debug mode via `NETTE_DEBUG` environmental variable and detect it this way:
 
 ```php
+use Contributte\Bootstrap\ExtraConfigurator;
+
 $configurator = new ExtraConfigurator();
 $configurator->setEnvDebugMode();
 ```
@@ -25,6 +34,8 @@ $configurator->setEnvDebugMode();
 or via a file. If no file is supplied as a parameter, it looks for `.debug` file in the root directory. The sole existence of the file with no content will set the debug mode to `TRUE`.
 
 ```php
+use Contributte\Bootstrap\ExtraConfigurator;
+
 $configurator = new ExtraConfigurator();
 $configurator->setFileDebugMode(__DIR__ . '/../.debug');
 ```
