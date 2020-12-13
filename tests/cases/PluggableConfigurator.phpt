@@ -2,17 +2,13 @@
 
 namespace Tests;
 
-/**
- * Test: PluggableConfigurator
- */
-
-require_once __DIR__ . '/../bootstrap.php';
-
 use Contributte\Bootstrap\PluggableConfigurator;
 use Ninjify\Nunjuck\Notes;
 use Tester\Assert;
 use Tests\Mocks\MockContainerPlugin;
 use Tests\Mocks\MockDebugContainerPlugin;
+
+require_once __DIR__ . '/../bootstrap.php';
 
 test(function (): void {
 	$pluggable = new PluggableConfigurator();

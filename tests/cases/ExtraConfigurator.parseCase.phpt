@@ -2,14 +2,10 @@
 
 namespace Tests;
 
-/**
- * Test: ExtraConfigurator
- */
-
-require_once __DIR__ . '/../bootstrap.php';
-
 use Tester\Assert;
 use Tests\Mocks\MockExtraConfigurator;
+
+require_once __DIR__ . '/../bootstrap.php';
 
 // Custom parse case
 test(function (): void {
