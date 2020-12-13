@@ -1,5 +1,9 @@
+includes:
+	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+
 parameters:
 	ignoreErrors:
-		- "#^Cannot assign offset \\'file\\' to array\\|false.$#"
-		- '#^PHPDoc tag @param for parameter \$params with type array is not subtype of native type array\<int, mixed\>\.$#'
 		- '#^Parameter \#1 \$callable of static method Closure\:\:fromCallable\(\) expects callable\(\)\: mixed, array\(Contributte\\Bootstrap\\Plugin\\IPlugin, .+\) given\.$#'

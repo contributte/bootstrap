@@ -26,7 +26,7 @@ class ExtraConfigurator extends Configurator
 	protected function getDefaultParameters(): array
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-		$last = end($trace);
+		$last = (array) end($trace);
 		$debugMode = static::detectDebugMode();
 
 		return [
@@ -70,7 +70,7 @@ class ExtraConfigurator extends Configurator
 		if ($fileName === null && $appDir === null) return;
 
 		// Try to load file
-		$content = @file_get_contents($fileName ?: $appDir . '/../.debug');
+		$content = @file_get_contents($fileName ?? $appDir . '/../.debug');
 		if ($content === false) return;
 
 		// File exists with no content

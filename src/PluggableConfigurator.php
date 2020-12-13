@@ -40,7 +40,7 @@ class PluggableConfigurator extends Configurator
 	protected function getDefaultParameters(): array
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-		$last = end($trace);
+		$last = (array) end($trace);
 		$debugMode = static::detectDebugMode();
 
 		return [
