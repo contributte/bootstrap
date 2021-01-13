@@ -2,7 +2,7 @@
 
 namespace Contributte\Bootstrap;
 
-use Nette\Configurator;
+use Nette\Bootstrap\Configurator;
 use Nette\InvalidStateException;
 
 class ExtraConfigurator extends Configurator
@@ -66,7 +66,7 @@ class ExtraConfigurator extends Configurator
 	public function setFileDebugMode(?string $fileName = null): void
 	{
 		// Given file name or default file path
-		$appDir = $this->parameters['appDir'] ?? null;
+		$appDir = $this->staticParameters['appDir'] ?? null;
 		if ($fileName === null && $appDir === null) return;
 
 		// Try to load file
