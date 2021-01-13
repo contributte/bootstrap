@@ -2,13 +2,14 @@
 
 namespace Tests;
 
+use Ninjify\Nunjuck\Toolkit;
 use Tester\Assert;
 use Tests\Mocks\MockExtraConfigurator;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 // Parsing NETTE__ parameters
-test(function (): void {
+Toolkit::test(function (): void {
 	$_SERVER = [];
 	env('NETTE__FOOBAR__BAR', 'foobar1');
 	env('NETTE__FOOBAR__BAZ', 'foobar2');
@@ -25,7 +26,7 @@ test(function (): void {
 });
 
 // Parsing all ENV parameters
-test(function (): void {
+Toolkit::test(function (): void {
 	$_SERVER = [];
 	env('NETTE__FOOBAR__BAR', 'foobar1');
 	env('NETTE_INVALID', 'foobar3');
@@ -41,7 +42,7 @@ test(function (): void {
 });
 
 // ENV Debug mode
-test(function (): void {
+Toolkit::test(function (): void {
 	$_SERVER = [];
 	$configurator = new MockExtraConfigurator();
 
@@ -80,7 +81,7 @@ test(function (): void {
 });
 
 // FILE Debug mode
-test(function (): void {
+Toolkit::test(function (): void {
 	$configurator = new MockExtraConfigurator();
 	$configurator->setDebugMode(false);
 	$fileName = TEMP_DIR . '/.debug';
@@ -120,7 +121,7 @@ test(function (): void {
 });
 
 // Passing parameters to configurator
-test(function (): void {
+Toolkit::test(function (): void {
 	$_SERVER = [];
 	env('NETTE__DATABASE__HOST', 'localhost');
 

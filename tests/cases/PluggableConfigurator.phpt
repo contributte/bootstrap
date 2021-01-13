@@ -4,13 +4,14 @@ namespace Tests;
 
 use Contributte\Bootstrap\PluggableConfigurator;
 use Ninjify\Nunjuck\Notes;
+use Ninjify\Nunjuck\Toolkit;
 use Tester\Assert;
 use Tests\Mocks\MockContainerPlugin;
 use Tests\Mocks\MockDebugContainerPlugin;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-test(function (): void {
+Toolkit::test(function (): void {
 	$pluggable = new PluggableConfigurator();
 	$pluggable->setTempDirectory(TEMP_DIR);
 
@@ -23,7 +24,7 @@ test(function (): void {
 	Assert::equal([MockContainerPlugin::class], Notes::fetch());
 });
 
-test(function (): void {
+Toolkit::test(function (): void {
 	$pluggable = new PluggableConfigurator();
 	$pluggable->setTempDirectory(TEMP_DIR);
 	unset($pluggable->defaultExtensions['di']);

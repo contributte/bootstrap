@@ -2,13 +2,14 @@
 
 namespace Tests;
 
+use Ninjify\Nunjuck\Toolkit;
 use Tester\Assert;
 use Tests\Mocks\MockExtraConfigurator;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 // Custom parse case
-test(function (): void {
+Toolkit::test(function (): void {
 	$_SERVER = [];
 	env('NETTE__USer', 'felix');
 
