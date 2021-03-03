@@ -38,10 +38,10 @@ Website ðŸš€ <a href="https://contributte.org">contributte.org</a> | Contact ðŸ‘
 
 ## Usage
 
-To install the latest version of `contributte/bootstrap` use [Composer](https://getcomposer.com).
+To install the latest version of `contributte/bootstrap` use [Composer](https://getcomposer.org).
 
 ```
-composer require contributte/bootstrap
+$ composer require contributte/bootstrap
 ```
 
 ## Documentation
@@ -68,5 +68,5 @@ This package is currently maintaining by these authors.
 
 -----
 
-Consider to [support](https://contributte.com/partners) **contributte** development team.
+Consider to [support](https://contributte.org/partners) **contributte** development team.
 Also thank you for using this package.
