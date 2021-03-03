@@ -96,7 +96,7 @@ class ExtraConfigurator extends Configurator
 	 */
 	public static function parseEnvironmentParameters(): array
 	{
-		return static::parseParameters($_SERVER, 'NETTE' . self::$parseDelimiter);
+		return static::parseParameters(getenv(), 'NETTE' . self::$parseDelimiter);
 	}
 
 	/**
