@@ -40,8 +40,8 @@ Website ðŸš€ <a href="https://contributte.org">contributte.org</a> | Contact ðŸ‘
 
 To install the latest version of `contributte/bootstrap` use [Composer](https://getcomposer.org).
 
-```
-$ composer require contributte/bootstrap
+```bash
+composer require contributte/bootstrap
 ```
 
 ## Documentation
