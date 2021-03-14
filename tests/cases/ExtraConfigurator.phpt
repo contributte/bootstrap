@@ -122,8 +122,8 @@ Toolkit::test(function (): void {
 
 // Passing parameters to configurator
 Toolkit::test(function (): void {
-	putenv('NETTE__DATABASE__HOST') //Unset specific varibale
-	putenv("NETTE__DATABASE__HOST=localhost") //Set specific test envvar
+	putenv('NETTE__DATABASE__HOST'); //Unset specific varibale
+	putenv("NETTE__DATABASE__HOST=localhost"); //Set specific test envvar
 	$configurator = new MockExtraConfigurator();
 	$configurator->addEnvParameters();
 	$configurator->addParameters([
