@@ -6,4 +6,4 @@ includes:
 
 parameters:
 	ignoreErrors:
-		- '#^Parameter \#1 \$callable of static method Closure\:\:fromCallable\(\) expects callable\(\)\: mixed, array\(Contributte\\Bootstrap\\Plugin\\IPlugin, .+\) given\.$#'
+		- '#^Parameter \#1 \$callback of static method Closure\:\:fromCallable\(\) expects callable\(\)\: mixed, array\(Contributte\\Bootstrap\\Plugin\\IPlugin, .+\) given\.$#'
