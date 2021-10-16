@@ -135,5 +135,5 @@ Toolkit::test(function (): void {
 	$container = $configurator->createContainer();
 
 	Assert::equal('localhost', $container->getParameters()['database']['host']);
-	Assert::equal('localhost', $container->getParameters()['foobar']);
+	Assert::equal('%database.host%', $container->getParameters()['foobar']);
 });
