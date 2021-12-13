@@ -15,7 +15,7 @@ class ExtraConfigurator extends Configurator
 	/** @var int How to parse the parameters */
 	protected static $parseCase = self::PARSE_LOWERCASE;
 
-	/** @var string Sections separator */
+	/** @var non-empty-string Sections separator */
 	protected static $parseDelimiter = '__';
 
 	/**
@@ -147,14 +147,14 @@ class ExtraConfigurator extends Configurator
 	public static function parseParameter(string $key): array
 	{
 		if (self::$parseCase === self::PARSE_LOWERCASE) {
-			return (array) explode(self::$parseDelimiter, strtolower($key));
+			return explode(self::$parseDelimiter, strtolower($key));
 		}
 
 		if (self::$parseCase === self::PARSE_UPPERCASE) {
-			return (array) explode(self::$parseDelimiter, strtoupper($key));
+			return explode(self::$parseDelimiter, strtoupper($key));
 		}
 
-		return (array) explode(self::$parseDelimiter, $key);
+		return explode(self::$parseDelimiter, $key);
 	}
 
 	public function setParseCase(int $mode): void
@@ -162,6 +162,7 @@ class ExtraConfigurator extends Configurator
 		self::$parseCase = $mode;
 	}
 
+	/** @param non-empty-string $delimiter */
 	public function setParseDelimiter(string $delimiter): void
 	{
 		self::$parseDelimiter = $delimiter;
