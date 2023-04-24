@@ -86,7 +86,7 @@ class ExtraConfigurator extends Configurator
 
 	public function addEnvParameters(): void
 	{
-		$this->addParameters($this->getEnvironmentParameters());
+		$this->addStaticParameters($this->getEnvironmentParameters());
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace Contributte\Bootstrap\Plugin;
 
-use Nette\Configurator;
+use Nette\Bootstrap\Configurator;
 use Nette\DI\Container;
 
 interface IDebugContainerPlugin extends IPlugin

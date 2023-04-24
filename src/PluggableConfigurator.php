@@ -2,14 +2,13 @@
 
 namespace Contributte\Bootstrap;
 
-use Closure;
 use Contributte\Bootstrap\Plugin\ICompilerPlugin;
 use Contributte\Bootstrap\Plugin\IConfigurationPlugin;
 use Contributte\Bootstrap\Plugin\IContainerPlugin;
 use Contributte\Bootstrap\Plugin\IDebugCompilerPlugin;
 use Contributte\Bootstrap\Plugin\IDebugContainerPlugin;
 use Contributte\Bootstrap\Plugin\IPlugin;
-use Nette\Configurator;
+use Nette\Bootstrap\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 
@@ -57,11 +56,11 @@ class PluggableConfigurator extends Configurator
 		$this->plugins[] = $plugin;
 	}
 
-	public function createContainer(): Container
+	public function createContainer(bool $initialize = true): Container
 	{
 		$this->trigger(IConfigurationPlugin::class, $this);
 
-		$container = parent::createContainer();
+		$container = parent::createContainer($initialize);
 
 		$this->trigger(IContainerPlugin::class, $this, $container);
 
@@ -91,7 +90,7 @@ class PluggableConfigurator extends Configurator
 			// Skip different plugin
 			if (!($plugin instanceof $class)) continue;
 			// Trigger plugin->plugin(...$params)
-			call_user_func_array(Closure::fromCallable([$plugin, 'plugin']), $params);
+			call_user_func_array([$plugin, 'plugin'], $params);
 		}
 	}
 

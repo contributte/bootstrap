@@ -2,7 +2,7 @@
 
 namespace Contributte\Bootstrap\Plugin;
 
-use Nette\Configurator;
+use Nette\Bootstrap\Configurator;
 
 interface IConfigurationPlugin extends IPlugin
 {

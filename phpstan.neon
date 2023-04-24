@@ -5,5 +5,25 @@ includes:
 	- vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
+	level: 9
+	phpVersion: 70400
+
+	scanDirectories:
+		- src
+
+	fileExtensions:
+		- php
+
+	paths:
+		- src
+
 	ignoreErrors:
-		- '#^Parameter \#1 \$callback of static method Closure\:\:fromCallable\(\) expects callable\(\)\: mixed, array\{Contributte\\Bootstrap\\Plugin\\IPlugin, .*\} given.$#'
+		-
+			message: "#^Cannot access an offset on iterable\\<callable\\>\\.$#"
+			count: 1
+			path: src/PluggableConfigurator.php
+
+		-
+			message: "#^Parameter \\#1 \\$function of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{Contributte\\\\Bootstrap\\\\Plugin\\\\IPlugin, 'plugin'\\} given\\.$#"
+			count: 1
+			path: src/PluggableConfigurator.php
