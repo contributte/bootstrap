@@ -16,7 +16,7 @@ class PluggableConfigurator extends Configurator
 {
 
 	/** @var IPlugin[] */
-	protected $plugins = [];
+	protected array $plugins = [];
 
 	/**
 	 * Creates configurator
@@ -29,26 +29,6 @@ class PluggableConfigurator extends Configurator
 		$this->onCompile[] = function (Configurator $configurator, Compiler $compiler): void {
 			$this->compile($configurator, $compiler);
 		};
-	}
-
-	/**
-	 * Collect default parameters
-	 *
-	 * @return mixed[]
-	 */
-	protected function getDefaultParameters(): array
-	{
-		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-		$last = (array) end($trace);
-		$debugMode = static::detectDebugMode();
-
-		return [
-			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : null,
-			'wwwDir' => isset($last['file']) ? dirname($last['file']) : null,
-			'debugMode' => $debugMode,
-			'productionMode' => !$debugMode,
-			'consoleMode' => PHP_SAPI === 'cli',
-		];
 	}
 
 	public function addPlugin(IPlugin $plugin): void
@@ -71,6 +51,26 @@ class PluggableConfigurator extends Configurator
 		return $container;
 	}
 
+	/**
+	 * Collect default parameters
+	 *
+	 * @return mixed[]
+	 */
+	protected function getDefaultParameters(): array
+	{
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		$last = (array) end($trace);
+		$debugMode = static::detectDebugMode();
+
+		return [
+			'appDir' => isset($trace[2]['file']) ? dirname($trace[2]['file']) : null,
+			'wwwDir' => isset($last['file']) ? dirname($last['file']) : null,
+			'debugMode' => $debugMode,
+			'productionMode' => !$debugMode,
+			'consoleMode' => PHP_SAPI === 'cli',
+		];
+	}
+
 	protected function compile(Configurator $configurator, Compiler $compiler): void
 	{
 		$this->trigger(ICompilerPlugin::class, $configurator, $compiler);
@@ -80,15 +80,14 @@ class PluggableConfigurator extends Configurator
 		}
 	}
 
-	/**
-	 * @param mixed[] $params
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 */
-	protected function trigger(string $class, ...$params): void
+	protected function trigger(string $class, mixed ...$params): void
 	{
 		foreach ($this->plugins as $plugin) {
 			// Skip different plugin
-			if (!($plugin instanceof $class)) continue;
+			if (!($plugin instanceof $class))
+
+			continue;
+
 			// Trigger plugin->plugin(...$params)
 			call_user_func_array([$plugin, 'plugin'], $params);
 		}

@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Mocks;
+namespace Tests\Fixtures;
 
 use Contributte\Bootstrap\Plugin\IContainerPlugin;
-use Nette\Configurator;
+use Contributte\Tester\Notes;
+use Nette\Bootstrap\Configurator;
 use Nette\DI\Container;
-use Ninjify\Nunjuck\Notes;
 
 final class MockContainerPlugin implements IContainerPlugin
 {

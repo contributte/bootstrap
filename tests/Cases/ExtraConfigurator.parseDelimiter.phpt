@@ -2,13 +2,12 @@
 
 namespace Tests;
 
-use Ninjify\Nunjuck\Toolkit;
+use Contributte\Tester\Toolkit;
 use Tester\Assert;
-use Tests\Mocks\MockExtraConfigurator;
+use Tests\Fixtures\MockExtraConfigurator;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-// Custom delimiter
 Toolkit::test(function (): void {
 	$_SERVER = [];
 	env('NETTE.DATABASE.HOST', 'localhost');

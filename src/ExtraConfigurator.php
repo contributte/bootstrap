@@ -13,29 +13,135 @@ class ExtraConfigurator extends Configurator
 	public const PARSE_UPPERCASE = 3;
 
 	/** @var int How to parse the parameters */
-	protected static $parseCase = self::PARSE_LOWERCASE;
+	protected static int $parseCase = self::PARSE_LOWERCASE;
 
 	/** @var non-empty-string Sections separator */
-	protected static $parseDelimiter = '__';
+	protected static string $parseDelimiter = '__';
 
 	/**
-	 * Collect default parameters
+	 * Parse environment parameters with NETTE{delimiter=__} prefix
 	 *
 	 * @return mixed[]
 	 */
-	protected function getDefaultParameters(): array
+	public static function parseEnvironmentParameters(): array
 	{
-		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-		$last = (array) end($trace);
-		$debugMode = static::detectDebugMode();
+		// @phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+		return static::parseParameters($_SERVER, 'NETTE' . self::$parseDelimiter);
+	}
 
-		return [
-			'appDir' => isset($trace[1]['file']) ? dirname($trace[1]['file']) : null,
-			'wwwDir' => isset($last['file']) ? dirname($last['file']) : null,
-			'debugMode' => $debugMode,
-			'productionMode' => !$debugMode,
-			'consoleMode' => PHP_SAPI === 'cli',
-		];
+	/**
+	 * Parse given parameters with custom prefix
+	 *
+	 * @param mixed[] $variables
+	 * @return mixed[]
+	 */
+	public static function parseParameters(array $variables, string $prefix): array
+	{
+		$parameters = [];
+		foreach ($variables as $key => $value) {
+			// Ensure value
+			$value = getenv($key);
+			if (strpos($key, $prefix) === 0 && $value !== false) {
+				// Parse PREFIX{delimiter=__}{NAME-1}{delimiter=__}{NAME-N}
+				$keys = static::parseParameter(substr($key, strlen($prefix)));
+				// Make array structure
+				$parameters = static::deepParameters($parameters, $keys, $value);
+			}
+		}
+
+		return $parameters;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function parseParameter(string $key): array
+	{
+		if (self::$parseCase === self::PARSE_LOWERCASE) {
+			return explode(self::$parseDelimiter, strtolower($key));
+		}
+
+		if (self::$parseCase === self::PARSE_UPPERCASE) {
+			return explode(self::$parseDelimiter, strtoupper($key));
+		}
+
+		return explode(self::$parseDelimiter, $key);
+	}
+
+	/**
+	 * Parse all environment variables
+	 *
+	 * @return mixed[]
+	 */
+	public static function parseAllEnvironmentParameters(): array
+	{
+		$parameters = [];
+
+		// @phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+		foreach ($_SERVER as $key => $value) {
+			// Ensure value
+			$value = getenv($key);
+			if ($value !== false) {
+				$parameters[$key] = $value;
+			}
+		}
+
+		return $parameters;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public static function parseEnvDebugMode(): mixed
+	{
+		$debug = getenv('NETTE_DEBUG');
+		if ($debug !== false) {
+			return static::parseDebugValue($debug);
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public static function parseDebugValue(string $debug): mixed
+	{
+		$value = $debug;
+
+		if (strtolower($value) === 'true' || $value === '1') {
+			$debug = true;
+		} elseif (strtolower($value) === 'false' || $value === '0') {
+			$debug = false;
+		}
+
+		return $debug;
+	}
+
+	/**
+	 * @param string[] $keys
+	 * @return array<string, mixed>
+	 */
+	public static function deepParameters(mixed $array, array $keys, string $value): array
+	{
+		if ($keys === []) {
+			return [];
+		}
+
+		$key = array_shift($keys);
+
+		if (!is_array($array)) {
+			throw new InvalidStateException(sprintf('Invalid structure for key "%s" value "%s"', implode($keys), $value));
+		}
+
+		if (!array_key_exists($key, $array)) {
+			$array[$key] = [];
+		}
+
+		// Recursive
+		$array[$key] = $keys === [] ? $value : self::deepParameters($array[$key], $keys, $value);
+
+		return $array;
 	}
 
 	/**
@@ -67,11 +173,15 @@ class ExtraConfigurator extends Configurator
 	{
 		// Given file name or default file path
 		$appDir = $this->staticParameters['appDir'] ?? null;
-		if ($fileName === null && $appDir === null) return;
+		if ($fileName === null && $appDir === null)
+
+			return;
 
 		// Try to load file
 		$content = @file_get_contents($fileName ?? $appDir . '/../.debug');
-		if ($content === false) return;
+		if ($content === false)
+
+			return;
 
 		// File exists with no content
 		if ($content === '') {
@@ -89,74 +199,6 @@ class ExtraConfigurator extends Configurator
 		$this->addStaticParameters($this->getEnvironmentParameters());
 	}
 
-	/**
-	 * Parse environment parameters with NETTE{delimiter=__} prefix
-	 *
-	 * @return mixed[]
-	 */
-	public static function parseEnvironmentParameters(): array
-	{
-		return static::parseParameters($_SERVER, 'NETTE' . self::$parseDelimiter);
-	}
-
-	/**
-	 * Parse given parameters with custom prefix
-	 *
-	 * @param mixed[] $variables
-	 * @return mixed[]
-	 */
-	public static function parseParameters(array $variables, string $prefix): array
-	{
-		$map = function (&$array, array $keys, $value) use (&$map) {
-			if (count($keys) <= 0) return $value;
-
-			$key = array_shift($keys);
-
-			if (!is_array($array)) {
-				throw new InvalidStateException(sprintf('Invalid structure for key "%s" value "%s"', implode($keys), $value));
-			}
-
-			if (!array_key_exists($key, $array)) {
-				$array[$key] = [];
-			}
-
-			// Recursive
-			$array[$key] = $map($array[$key], $keys, $value);
-
-			return $array;
-		};
-
-		$parameters = [];
-		foreach ($variables as $key => $value) {
-			// Ensure value
-			$value = getenv($key);
-			if (strpos($key, $prefix) === 0 && $value !== false) {
-				// Parse PREFIX{delimiter=__}{NAME-1}{delimiter=__}{NAME-N}
-				$keys = static::parseParameter(substr($key, strlen($prefix)));
-				// Make array structure
-				$map($parameters, $keys, $value);
-			}
-		}
-
-		return $parameters;
-	}
-
-	/**
-	 * @return mixed[]
-	 */
-	public static function parseParameter(string $key): array
-	{
-		if (self::$parseCase === self::PARSE_LOWERCASE) {
-			return explode(self::$parseDelimiter, strtolower($key));
-		}
-
-		if (self::$parseCase === self::PARSE_UPPERCASE) {
-			return explode(self::$parseDelimiter, strtoupper($key));
-		}
-
-		return explode(self::$parseDelimiter, $key);
-	}
-
 	public function setParseCase(int $mode): void
 	{
 		self::$parseCase = $mode;
@@ -169,51 +211,23 @@ class ExtraConfigurator extends Configurator
 	}
 
 	/**
-	 * Parse all environment variables
+	 * Collect default parameters
 	 *
 	 * @return mixed[]
 	 */
-	public static function parseAllEnvironmentParameters(): array
+	protected function getDefaultParameters(): array
 	{
-		$parameters = [];
-		foreach ($_SERVER as $key => $value) {
-			// Ensure value
-			$value = getenv($key);
-			if ($value !== false) {
-				$parameters[$key] = $value;
-			}
-		}
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		$last = (array) end($trace);
+		$debugMode = static::detectDebugMode();
 
-		return $parameters;
-	}
-
-	/**
-	 * @return bool|string
-	 */
-	public static function parseEnvDebugMode()
-	{
-		$debug = getenv('NETTE_DEBUG');
-		if ($debug !== false) {
-			return static::parseDebugValue($debug);
-		}
-
-		return false;
-	}
-
-	/**
-	 * @return bool|string
-	 */
-	public static function parseDebugValue(string $debug)
-	{
-		$value = $debug;
-
-		if (strtolower($value) === 'true' || $value === '1') {
-			$debug = true;
-		} elseif (strtolower($value) === 'false' || $value === '0') {
-			$debug = false;
-		}
-
-		return $debug;
+		return [
+			'appDir' => isset($trace[1]['file']) ? dirname($trace[1]['file']) : null,
+			'wwwDir' => isset($last['file']) ? dirname($last['file']) : null,
+			'debugMode' => $debugMode,
+			'productionMode' => !$debugMode,
+			'consoleMode' => PHP_SAPI === 'cli',
+		];
 	}
 
 }

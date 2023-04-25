@@ -3,11 +3,11 @@
 namespace Tests;
 
 use Contributte\Bootstrap\PluggableConfigurator;
-use Ninjify\Nunjuck\Notes;
-use Ninjify\Nunjuck\Toolkit;
+use Contributte\Tester\Notes;
+use Contributte\Tester\Toolkit;
 use Tester\Assert;
-use Tests\Mocks\MockContainerPlugin;
-use Tests\Mocks\MockDebugContainerPlugin;
+use Tests\Fixtures\MockContainerPlugin;
+use Tests\Fixtures\MockDebugContainerPlugin;
 
 require_once __DIR__ . '/../bootstrap.php';
 
