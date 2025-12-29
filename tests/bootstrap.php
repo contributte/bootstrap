@@ -7,13 +7,4 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 	exit(1);
 }
 
-// Configure environment
-Environment::setupTester();
-Environment::setupTimezone();
-Environment::setupVariables(__DIR__);
-
-function env(string $key, string|float|bool $value): void
-{
-	$_SERVER[$key] = $value;
-	putenv(sprintf('%s=%s', $key, $value));
-}
+Environment::setup(__DIR__);

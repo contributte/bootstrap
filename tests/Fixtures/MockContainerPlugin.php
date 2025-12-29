@@ -3,7 +3,7 @@
 namespace Tests\Fixtures;
 
 use Contributte\Bootstrap\Plugin\IContainerPlugin;
-use Contributte\Tester\Notes;
+use Contributte\Tester\Utils\Notes;
 use Nette\Bootstrap\Configurator;
 use Nette\DI\Container;
 
