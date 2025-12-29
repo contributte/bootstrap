@@ -1,12 +1,9 @@
 includes:
-	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
-	- vendor/phpstan/phpstan-nette/extension.neon
-	- vendor/phpstan/phpstan-nette/rules.neon
-	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/contributte/phpstan/phpstan.neon
 
 parameters:
 	level: 9
-	phpVersion: 70400
+	phpVersion: 80200
 
 	scanDirectories:
 		- src
@@ -19,11 +16,6 @@ parameters:
 
 	ignoreErrors:
 		-
-			message: "#^Cannot access an offset on iterable\\<callable\\>\\.$#"
-			count: 1
-			path: src/PluggableConfigurator.php
-
-		-
-			message: "#^Parameter \\#1 \\$function of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{Contributte\\\\Bootstrap\\\\Plugin\\\\IPlugin, 'plugin'\\} given\\.$#"
+			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{Contributte\\\\Bootstrap\\\\Plugin\\\\IPlugin, 'plugin'\\} given\\.$#"
 			count: 1
 			path: src/PluggableConfigurator.php
