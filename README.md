@@ -4,8 +4,8 @@
   <a href="https://github.com/contributte/bootstrap/actions">
     <img src="https://badgen.net/github/checks/contributte/bootstrap/master?cache=300">
   </a>
-  <a href="https://coveralls.io/r/contributte/bootstrap">
-    <img src="https://badgen.net/coveralls/c/github/contributte/bootstrap?cache=300">
+  <a href="https://codecov.io/gh/contributte/bootstrap">
+    <img src="https://badgen.net/codecov/c/github/contributte/bootstrap?cache=300">
   </a>
   <a href="https://packagist.org/packages/contributte/bootstrap">
     <img src="https://badgen.net/packagist/dm/contributte/bootstrap">
